@@ -1,0 +1,37 @@
+global:
+  resolve_timeout: 5m
+  wechat_api_url: 'https://qyapi.weixin.qq.com/cgi-bin/'
+  wechat_api_secret: ''
+  wechat_api_corp_id: ''
+
+templates:
+- '*.tmpl'
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'null'
+
+receivers:
+- name: 'null'
+- name: 'wechat'
+  wechat_configs:
+  - send_resolved: true
+    corp_id: ''
+    to_user: '@all'
+    to_party: '2'
+    message: '{{ template "wechat.default.message" . }}'
+    agent_id: '1000002'
+    api_secret: ''
+
+inhibit_rules:
+- source_match:
+    severity: 'critical'
+  target_match:
+    severity: 'warning'
+  equal:
+  - alertname
+  - job
+  - instance

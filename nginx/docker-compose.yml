@@ -1,0 +1,39 @@
+version: "3.4"
+
+networks:
+  nginx_net:
+    driver: overlay
+    attachable: true
+
+configs:
+  nginx_config:
+    file: ./nginx.conf
+
+services:
+  nginx:
+    image: nginx:1.19.1-alpine3.11
+    ports:
+      - "30080:80"
+    networks:
+      - nginx_net
+    configs:
+      - source: nginx_config
+        target: /etc/nginx/nginx.conf
+    deploy:
+      mode: replicated
+      replicas: 1
+#      resources:
+#        limits:
+#          cpus: '0.2'
+#          memory: 64M
+#        reservations:
+#          cpus: '0.1'
+#          memory: 32M
+    healthcheck:
+#      test: ["CMD", "curl", "-f", "-s", "http://localhost"]
+      test: ["CMD-SHELL", "curl -f -s http://localhost || exit 1"]
+#      test: curl -f -s https://localhost || exit 1
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 40s

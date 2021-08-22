@@ -1,0 +1,18 @@
+groups:
+- name: 容器告警
+  rules:
+  - alert: 容器高CPU使用率
+    expr: sum(rate(container_cpu_usage_seconds_total{container_label_com_docker_swarm_task_name=~".+"}[1m])) BY (container_label_com_docker_swarm_task_name, container_label_com_docker_swarm_node_id) * 100 > 85
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: 节点 {{ $labels.container_label_com_docker_swarm_node_id }} 上的容器 {{ $labels.container_label_com_docker_swarm_task_name }} CPU使用率为 {{ humanize $value}}%。
+
+  - alert: 容器高内存使用量
+    expr: sum(container_memory_rss{container_label_com_docker_swarm_task_name=~".+"}) BY (container_label_com_docker_swarm_task_name, container_label_com_docker_swarm_node_id) > 2e+09
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: 节点 {{ $labels.container_label_com_docker_swarm_node_id }} 上的容器 {{ $labels.container_label_com_docker_swarm_task_name }} 内存使用量为 {{ humanize $value }}。

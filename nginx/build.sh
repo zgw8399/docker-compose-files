@@ -1,0 +1,8 @@
+#!/bin/bash
+#
+DOCKER_REGISTRY=
+PROJECT_NAME=
+APP_NAME=nginx
+APP_VERSION=1.19.1-alpine3.11
+
+docker build -t ${DOCKER_REGISTRY}/${PROJECT_NAME}/${APP_NAME}:${APP_VERSION} .

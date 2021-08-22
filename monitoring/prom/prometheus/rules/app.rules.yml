@@ -1,0 +1,68 @@
+groups:
+- name: MySQL数据库告警
+  rules:
+  - alert: MySQL数据库关闭
+    expr: mysql_up == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "MySQL数据库关闭超过2分钟。"
+
+- name: MongoDB数据库告警
+  rules:
+  - alert: MongoDB数据库关闭
+    expr: mongodb_up == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "MongoDB数据库关闭超过2分钟。"
+
+- name: Postgres数据库告警
+  rules:
+  - alert: Postgres数据库关闭
+    expr: pg_up == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "Postgres数据库关闭超过2分钟。"
+
+- name: Kong服务网关告警
+  rules:
+  - alert: Kong服务网关存储不可达
+    expr: kong_datastore_reachable == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "Kong服务网关存储不可达超过2分钟。"
+
+- name: NFS存储服务告警
+  rules:
+  - alert: NFS服务不可达
+    expr: probe_success{job="nfs-server"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "NFS服务不可达超过2分钟。"
+
+  - alert: rpcbind服务不可达
+    expr: probe_success{job="rpcbind"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "rpcbind服务不可达超过2分钟。"
+
+- name: 应用服务告警
+  rules:
+  - alert: 应用服务异常
+    expr: probe_success{job=~"mes_app_.*"} == 0
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: "应用服务异常超过2分钟。"

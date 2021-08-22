@@ -1,0 +1,32 @@
+[
+  {
+    "targets": [ "192.168.2.58:9104"],
+    "labels": {
+      "job": "mysqld-exporter"
+    }
+  },
+  {
+    "targets": [ "192.168.2.58:9001"],
+    "labels": {
+      "job": "mongodb-exporter"
+    }
+  },
+  {
+    "targets": [ "192.168.2.58:9187"],
+    "labels": {
+      "job": "postgresql-exporter"
+    }
+  },
+  {
+    "targets": [ "192.168.2.58:8001"],
+    "labels": {
+      "job": "kong-api-gateway"
+    }
+  },
+  {
+    "targets": [ "192.168.2.58:5001"],
+    "labels": {
+      "job": "docker-registry"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+version: '${COMPOSE_FILE_VERSION}'
+
+configs:
+  blackbox_config_${BLACKBOX_CONFIG_VERSION}:
+    file: ./blackbox.yml
+
+services:
+  blackboxexporter:
+    image: ${DOCKER_REGISTRY}/${PROJECT_NAME}/${BLACKBOX_IMAGE_NAME}:${BLACKBOX_IMAGE_TAG}
+    ports:
+      - "${BLACKBOX_SERVICE_PORT}:9115"
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.25'
+          memory: 64M
+    configs:
+      - source: blackbox_config_${BLACKBOX_CONFIG_VERSION}
+        target: blackbox.yml
+
+networks:
+  default:
+    external: true
+    name: ${APP_NETWORK_NAME}

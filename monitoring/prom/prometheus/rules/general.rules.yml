@@ -1,0 +1,17 @@
+groups:
+- name: 通用告警
+  rules:
+  - alert: 实例关闭
+    expr: up == 0
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: "实例关闭超过2分钟。"
+
+  - alert: Watchdog
+    expr: vector(1)
+    labels:
+      severity: none
+    annotations:
+      description: "此告警旨在确保整个告警通道均正常运行。"

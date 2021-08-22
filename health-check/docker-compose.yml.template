@@ -1,0 +1,30 @@
+version: '${COMPOSE_FILE_VERSION}'
+
+networks:
+  app_net:
+    external: true
+    name: ${APP_NETWORK_NAME}
+
+services:
+  ${APP_NAME}:
+    image: ${DOCKER_REGISTRY}/${PROJECT_NAME}/${APP_NAME}:${APP_VERSION}
+    ports:
+      - ${SERVICE_PORT}:80
+    networks:
+      - app_net
+    deploy:
+      mode: replicated
+      replicas: ${REPLICAS}
+      resources:
+        limits:
+          memory: ${LIMITS_MEMORY}
+          cpus: '${LIMITS_CPUS}'
+        reservations:
+          memory: ${RESERVATIONS_MEMORY}
+          cpus: '${RESERVATIONS_CPUS}'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s http://localhost/healthz || exit 1"]
+      interval: ${INTERVAL}
+      timeout: ${TIMEOUT}
+      retries: ${RETRIES}
+      start_period: ${START_PERIOD}
