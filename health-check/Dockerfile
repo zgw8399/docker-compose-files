@@ -3,8 +3,7 @@ FROM python:3.6.13-alpine3.13
 MAINTAINER varden
 
 # 修改安装源
-RUN echo "https://mirrors.aliyun.com/alpine/v3.13/main/" > /etc/apk/repositories
-RUN echo "https://mirrors.aliyun.com/alpine/v3.13/community/" >> /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 ENV LANG C.UTF-8
 RUN apk update
 

@@ -1,0 +1,16 @@
+# MySQL连接参数
+mysql:
+  host: '127.0.0.1'
+  user: ''
+  password: ''
+  database: ''
+
+# MongoDB连接参数
+mongo:
+  host: '127.0.0.1'
+  port: 27017
+  username: ''
+  password: ''
+  authSource: 'admin'
+  authMechanism: 'SCRAM-SHA-256'
+  maxPoolSize: 1024
