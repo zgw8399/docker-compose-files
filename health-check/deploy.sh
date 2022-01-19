@@ -69,7 +69,7 @@ START_PERIOD=40s
 
 ## 创建网络
 create_network(){
-    echo "--> 如果网络不存在，则创建"
+    echo "--> 创建容器网络"
     docker network inspect ${NETWORK_NAME} &>/dev/null
     RETVAL=$?
     if [ ${RETVAL} -ne 0 ];then
@@ -81,9 +81,10 @@ create_network(){
 }
 
 ## 生成部署所需文件
+
 gen_files(){
-# 配置文件（可选）
-echo "--> 生成配置文件（可选）"
+# 配置文件
+echo "--> 生成配置文件：config.yaml"
 cat <<EOF >config.yaml
 # MySQL连接参数
 mysql:
@@ -103,9 +104,8 @@ mongo:
   maxPoolSize: 1024
 EOF
 cat config.yaml
-
 # 部署模板
-echo "--> 生成部署模板"
+echo "--> 生成部署模板：docker-compose.yml"
 cat <<EOF >docker-compose.yml
 version: '${COMPOSE_VERSION}'
 
@@ -150,21 +150,22 @@ cat docker-compose.yml
 
 ## 构建容器
 build(){
-    echo "===构建容器==="
+    echo "===构建容器步骤==="
     docker build -t ${IMAGE_NAME} .
     docker push ${IMAGE_NAME}
 }
 
 ## 部署容器
 deploy(){
-    echo "===部署容器==="
+    echo "===部署容器步骤==="
     create_network
     gen_files
+    echo "--> 部署服务"
     docker stack deploy -c docker-compose.yml ${STACK_NAME}
+    rm -f docker-compose.yml config.yaml
 }
 
 ### 主程序
-
 case $1 in
     build)
         build ;;
